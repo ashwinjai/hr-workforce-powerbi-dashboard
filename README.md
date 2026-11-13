@@ -43,30 +43,6 @@ About 60 measures are grouped into five families:
 | Tenure | Avg Tenure (yrs), Avg Tenure LY |
 | Display | Card value, Δ label and Δ colour measures for every KPI, heatmap colour measures |
 
-```dax
-Headcount =
-VAR d = MAX ( 'Calendar'[Date] )
-RETURN
-    CALCULATE (
-        COUNTROWS ( Employees ),
-        Employees[HireDate] <= d,
-        OR ( ISBLANK ( Employees[TerminationDate] ), Employees[TerminationDate] > d ),
-        REMOVEFILTERS ( 'Calendar' )
-    )
-
-Hires = CALCULATE ( COUNTROWS ( Employees ), USERELATIONSHIP ( Employees[HireDate], 'Calendar'[Date] ) )
-
-Rolling 12M Attrition =
-VAR d = MAX ( 'Calendar'[Date] )
-RETURN
-    DIVIDE (
-        CALCULATE ( [Exits], DATESINPERIOD ( 'Calendar'[Date], d, -12, MONTH ) ),
-        CALCULATE ( [Avg Headcount], DATESINPERIOD ( 'Calendar'[Date], d, -12, MONTH ) )
-    )
-
-Attrition Δ Label = FORMAT ( [Attrition Δ pts], "▲ 0.0 pts;▼ 0.0 pts;0.0 pts" ) & " vs last year"
-Attrition Δ Color = IF ( [Attrition Δ pts] <= 0, "#2DD4BF", "#F59E0B" )
-```
 
 The KPI colour measures use **inverted logic** where a fall is good news (attrition, exits, regretted exits, open positions): teal means good, amber means attention needed. Each change is always shown with a ▲/▼ arrow, so it can be read without relying on colour.
 
