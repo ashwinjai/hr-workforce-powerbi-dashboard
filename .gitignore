@@ -1,0 +1,6 @@
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+# Local / temporary files
+_backup_before_dashboard/
+*_V1.pbix
+~$*.xlsx
